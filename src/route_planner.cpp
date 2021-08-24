@@ -13,8 +13,6 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
     this->start_node = &(m_Model.FindClosestNode(start_x, end_x));
     this->end_node = &(m_Model.FindClosestNode(start_y, end_y));
-
-    // = m_Model.FindClosestNode(start_y, end_y);
 }
 
 // TODO 3: Implement the CalculateHValue method.
@@ -24,6 +22,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node)
 {
+    RouteModel::Node hvalue;
+    return hvalue.distance((*node));
 }
 
 // TODO 4: Complete the AddNeighbors method to expand the current node by adding all unvisited neighbors to the open list.
