@@ -44,13 +44,13 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
     {
         for (RouteModel::Node *each_node : current_node->neighbors)
         {
-            each_node->parent = current_node; 
+            each_node->parent = current_node;
             each_node->h_value = RoutePlanner::CalculateHValue(current_node);
             // NOTE: the cost of the path from the start
             // node to the end node.
             each_node->g_value++;
 
-            open_list.emplace_back(each_node);
+            this->open_list.emplace_back(each_node);
             each_node->visited = true;
         }
     }
@@ -65,6 +65,13 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
 
 RouteModel::Node *RoutePlanner::NextNode()
 {
+    RouteModel::Node *node_obj;
+    std::sort(this->open_list.begin(), this->open_list.end(), [](const RouteModel::Node *_x, const RouteModel::Node *_y)
+              { return _x->h_value + _x->g_value < _y->h_value + _y->g_value; });
+
+    RouteModel::Node *lowest_sum_node = open_list.front();
+    this->open_list.erase(this->open_list.begin());
+    return lowest_sum_node;
 }
 
 // TODO 6: Complete the ConstructFinalPath method to return the final path found from your A* search.
