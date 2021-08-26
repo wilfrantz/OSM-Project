@@ -44,10 +44,13 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
     {
         for (RouteModel::Node *each_node : current_node->neighbors)
         {
-            each_node->parent = --current_node; // NOTE: Not sure about this(Placeholder).
+            each_node->parent = current_node; 
             each_node->h_value = RoutePlanner::CalculateHValue(current_node);
-            // each_node->g_value = ;
-            RouteModel::Node node;
+            // NOTE: the cost of the path from the start
+            // node to the end node.
+            each_node->g_value++;
+
+            open_list.emplace_back(each_node);
             each_node->visited = true;
         }
     }
