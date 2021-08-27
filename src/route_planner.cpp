@@ -43,6 +43,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
     while (!current_node->neighbors.empty())
     {
         for (RouteModel::Node *each_node : current_node->neighbors)
+        // for (auto it = current_node->neighbors.begin(); it != current_node->neighbors.end(); )
         {
             each_node->parent = current_node;
             each_node->h_value = RoutePlanner::CalculateHValue(current_node);
@@ -50,7 +51,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
             // node to the end node.
             each_node->g_value++;
 
-            this->open_list.emplace_back(each_node);
+            this->open_list.push_back(each_node);
+            // this->open_list.emplace_back(each_node);
             each_node->visited = true;
         }
     }
