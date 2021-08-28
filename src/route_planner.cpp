@@ -11,8 +11,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-    this->start_node = &(m_Model.FindClosestNode(start_x, end_x));
-    this->end_node = &(m_Model.FindClosestNode(start_y, end_y));
+    this->start_node = &m_Model.FindClosestNode(start_x, start_y);
+    this->end_node = &m_Model.FindClosestNode(end_x, end_y);
 }
 
 // TODO 3: Implement the CalculateHValue method.
@@ -39,18 +39,15 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
 {
     current_node->FindNeighbors();
 
-    while (!current_node->neighbors.empty())
-    {
         for (RouteModel::Node *each_node : current_node->neighbors)
         {
             each_node->parent = current_node;
+            each_node->g_value = current_node->g_value + current_node->distance(*each_node);
             each_node->h_value = RoutePlanner::CalculateHValue(current_node);
-            each_node->g_value++;
 
             this->open_list.push_back(each_node);
             each_node->visited = true;
         }
-    }
 }
 
 // TODO 5: Complete the NextNode method to sort the open list and return the next node.
@@ -118,7 +115,7 @@ void RoutePlanner::AStarSearch()
 
         current_node = NextNode();
 
-        if (current_node->distance(*current_node) == 0)
+        if (current_node->distance(*end_node) == 0)
         {
             this->m_Model.path = ConstructFinalPath(current_node);
             return;
