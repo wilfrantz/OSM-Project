@@ -43,16 +43,12 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
     while (!current_node->neighbors.empty())
     {
         for (RouteModel::Node *each_node : current_node->neighbors)
-        // for (auto it = current_node->neighbors.begin(); it != current_node->neighbors.end(); )
         {
             each_node->parent = current_node;
             each_node->h_value = RoutePlanner::CalculateHValue(current_node);
-            // NOTE: the cost of the path from the start
-            // node to the end node.
             each_node->g_value++;
 
             this->open_list.push_back(each_node);
-            // this->open_list.emplace_back(each_node);
             each_node->visited = true;
         }
     }
@@ -91,6 +87,12 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
+    while (current_node->parent != nullptr)
+    {
+        path_found.push_back(*current_node);
+        distance += current_node->distance(*current_node->parent);
+        current_node = current_node->parent;
+    }
 
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
