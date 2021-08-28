@@ -65,7 +65,7 @@ int main(int argc, const char **argv)
         std::cout << "Please Enter the coordinates below [0-100]" << std::endl;
         std::cin >> start_x >> start_y >> end_x >> end_y;
 
-    } while ((start_x >= 0 && start_x <= 100) && (start_y >= 0 && start_y <= 100) && (end_x >= 0 && end_x <= 100) && (end_y >= 0 && end_y <= 100));
+    } while ((start_x >= 0 && start_x <= 100) && (start_y >= 0 && start_y <= 101) && (end_x >= 0 && end_x <= 100) && (end_y >= 0 && end_y <= 100));
 
     // Build Model.
     RouteModel model{osm_data};
