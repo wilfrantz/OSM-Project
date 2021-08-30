@@ -39,15 +39,15 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
 {
     current_node->FindNeighbors();
 
-        for (RouteModel::Node *each_node : current_node->neighbors)
-        {
-            each_node->parent = current_node;
-            each_node->g_value = current_node->g_value + current_node->distance(*each_node);
-            each_node->h_value = RoutePlanner::CalculateHValue(each_node);
+    for (RouteModel::Node *each_node : current_node->neighbors)
+    {
+        each_node->parent = current_node;
+        each_node->h_value = RoutePlanner::CalculateHValue(each_node);
+        each_node->g_value = current_node->g_value + current_node->distance(*each_node);
 
-            this->open_list.push_back(each_node);
-            each_node->visited = true;
-        }
+        each_node->visited = true;
+        this->open_list.push_back(each_node);
+    }
 }
 
 // TODO 5: Complete the NextNode method to sort the open list and return the next node.
@@ -83,16 +83,17 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
 
     // TODO: Implement your solution here.
-    while (current_node->parent != nullptr)
+    while (current_node->parent != start_node)
     {
-        path_found.push_back(*current_node);
         distance += current_node->distance(*current_node->parent);
+        path_found.push_back(*current_node);
         current_node = current_node->parent;
     }
-    // path_found.push_back((*current_node));
+     path_found.push_back((*current_node));
     // NOTE: Need to reverse the nodes inside the path_found after finishing the loop.
     std::reverse(path_found.begin(), path_found.end());
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
+
     return path_found;
 }
 
