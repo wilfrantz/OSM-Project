@@ -48,6 +48,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node)
         each_node->visited = true;
         this->open_list.push_back(each_node);
     }
+
 }
 
 // TODO 5: Complete the NextNode method to sort the open list and return the next node.
