@@ -28,22 +28,17 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
+// Get the coordinates one at a time from stdin & perform error checking.
+/// param: coordinate, min & max value.
 float UserPrompt(float x = -1.0, int min = 0, int max = 100)
 {
-
     // Loop control.
-    unsigned int input_failure = 0, i = 1;
+    unsigned int input_failure = 0;
 
     do
     {
-
         std::cout << "Please enter coordinates below [0-100]" << std::endl;
         cin >> x;
-        i++;
-
-        // NOTE: Remove me
-        std::cout
-            << "You entered " << x << std::endl;
 
         while (cin.fail())
         {
@@ -95,9 +90,7 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
 
-    // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
-    // user input for these values using std::cin. Pass the user input to the
-    // RoutePlanner object below in place of 10, 10, 90, 90.
+    // Prompt the user and get the coordinates.
     float start_x = UserPrompt();
     float start_y = UserPrompt();
     float end_x = UserPrompt();
