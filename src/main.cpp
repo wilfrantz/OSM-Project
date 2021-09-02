@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
+
 #include "route_model.h"
 #include "render.h"
 #include "route_planner.h"
@@ -26,22 +27,44 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
         return std::nullopt;
     return std::move(contents);
 }
-bool UserPrompt()
+
+float UserPrompt(float x = -1.0, int min = 0, int max = 100)
 {
 
-    float start_x = 0.0f, start_y = 0.0f, end_x = 0.0f, end_y = 0.0f;
+    // Loop control.
+    unsigned int input_failure = 0, i = 1;
 
     do
     {
-        std::cout << "Please Enter the coordinates below [0-100]" << std::endl;
-        std::cin >> start_x >> start_y >> end_x >> end_y;
 
-    } while ((start_x >= 0 && start_x <= 100) && (start_y >= 0 && start_y <= 101) && (end_x >= 0 && end_x <= 100) && (end_y >= 0 && end_y <= 100));
+        std::cout << "Please enter coordinates below [0-100]" << std::endl;
+        cin >> x;
+        i++;
 
-    // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
+        // NOTE: Remove me
+        std::cout
+            << "You entered " << x << std::endl;
 
-    return true;
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(123, '\n');
+            std::cout << '\n'
+                      << "Wrong entry! Try again: [" << input_failure << "/3]" << std::endl;
+            cin >> x;
+
+            input_failure++;
+
+            if (input_failure == 3)
+            {
+                std::cout << "Limit exceeded !!!" << std::endl;
+                exit(1);
+            }
+        }
+        return x;
+    } while ((x < max) && (x > min));
+
+    exit(-1);
 }
 
 int main(int argc, const char **argv)
@@ -75,14 +98,17 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
-   if (UserPrompt();){
+    float start_x = UserPrompt();
+    float start_y = UserPrompt();
+    float end_x = UserPrompt();
+    float end_y = UserPrompt();
 
+    // Create RoutePlanner object and perform A* search.
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     // Build Model.
     RouteModel model{osm_data};
 
     route_planner.AStarSearch();
-   }
-
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
 
